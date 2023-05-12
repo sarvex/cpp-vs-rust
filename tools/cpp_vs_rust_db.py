@@ -130,7 +130,7 @@ class DB:
             """,
             runs_parameters,
         ).fetchall()
-        runs = [
+        return [
             DB.Run(
                 id=run_id,
                 hostname=hostname,
@@ -147,8 +147,6 @@ class DB:
                 benchmark_name,
             ) in raw_runs
         ]
-
-        return runs
 
     def dump_runs(self, runs: typing.List["DB.Run"]) -> None:
         column_names = (

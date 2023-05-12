@@ -115,7 +115,7 @@ def main() -> None:
     os.chdir(pathlib.Path(__file__).parent / "..")
     cwd = pathlib.Path(".")
 
-    converted_cpp_files = set(cwd / p for p in CONVERTED_CPP_FILES)
+    converted_cpp_files = {cwd / p for p in CONVERTED_CPP_FILES}
 
     cpp_files = flatten(
         cwd.glob(pattern)

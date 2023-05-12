@@ -66,10 +66,7 @@ def main() -> None:
 
     if args.dump_runs or args.dump_all_runs:
         db = DB(BENCH_BUILD_DB)
-        if args.dump_all_runs:
-            runs = db.load_all_runs()
-        else:
-            runs = db.load_latest_runs()
+        runs = db.load_all_runs() if args.dump_all_runs else db.load_latest_runs()
         db.dump_runs(runs)
         return
 
@@ -841,10 +838,8 @@ def rustup_which(command: str, *, toolchain: str) -> pathlib.Path:
 
 
 def delete_dir(dir: pathlib.Path) -> None:
-    try:
+    with contextlib.suppress(FileNotFoundError):
         shutil.rmtree(dir)
-    except FileNotFoundError:
-        pass
 
 
 cache_bust = 1

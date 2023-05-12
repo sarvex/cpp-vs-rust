@@ -366,10 +366,7 @@ class OptimizedRustcFlagsCharter(Charter):
                 for group_name, group_bars in group_bars_by_name.items()
             ],
         )
-        write_chart(
-            chart=chart,
-            path=output_dir / f"optimized-rustc-flags.svg",
-        )
+        write_chart(chart=chart, path=output_dir / "optimized-rustc-flags.svg")
 
 
 class RustLayoutsCharter(Charter):
@@ -644,10 +641,7 @@ class RustToolchainsCharter(Charter):
                 for group_name, group_bars in group_bars_by_name.items()
             ],
         )
-        write_chart(
-            chart=chart,
-            path=output_dir / f"rust-toolchain.svg",
-        )
+        write_chart(chart=chart, path=output_dir / "rust-toolchain.svg")
 
 
 class CPPToolchainsCharter(Charter):
@@ -748,12 +742,13 @@ class CPPToolchainsCharter(Charter):
                 name="Linux: <tspan class='color-3-of-3'>custom Clang</tspan> is fastest toolchain"
                 if hostname == "strapurp"
                 else "macOS: <tspan class='color-1-of-2'>Xcode</tspan> is fastest toolchain",
-                subtitle=f"lower is better.",
+                subtitle="lower is better.",
                 groups=[
                     BarChartGroup(
                         name=group_name,
                         bars=sorted(
-                            group_bars, key=lambda bar: toolchain_order.index(bar.name)
+                            group_bars,
+                            key=lambda bar: toolchain_order.index(bar.name),
                         ),
                     )
                     for group_name, group_bars in group_bars_by_name.items()
@@ -815,16 +810,12 @@ class CPPVSRustCharter(Charter):
         for hostname in ("strammer.lan", "strapurp"):
             if hostname == "strapurp":
                 toolchains = self._linux_toolchains
-                toolchain_order = [
-                    "Rust",
-                    "C++",
-                ]
             else:
                 toolchains = self._macos_toolchains
-                toolchain_order = [
-                    "Rust",
-                    "C++",
-                ]
+            toolchain_order = [
+                "Rust",
+                "C++",
+            ]
             group_bars_by_name = collections.defaultdict(list)
             for run in runs:
                 if run.hostname != hostname:
@@ -850,12 +841,13 @@ class CPPVSRustCharter(Charter):
                 name="Linux: <tspan class='color-1-of-2'>Rust</tspan> sometimes builds faster than <tspan class='color-2-of-2'>C++</tspan>"
                 if hostname == "strapurp"
                 else "macOS: <tspan class='color-2-of-2'>C++</tspan> usually builds faster than <tspan class='color-1-of-2'>Rust</tspan>",
-                subtitle=f"lower is better.",
+                subtitle="lower is better.",
                 groups=[
                     BarChartGroup(
                         name=group_name,
                         bars=sorted(
-                            group_bars, key=lambda bar: toolchain_order.index(bar.name)
+                            group_bars,
+                            key=lambda bar: toolchain_order.index(bar.name),
                         ),
                     )
                     for group_name, group_bars in group_bars_by_name.items()
@@ -950,13 +942,14 @@ class CPPVSRustScalingCharter(Charter):
                 )
             chart = BarChart(
                 name=f"<tspan class='color-2-of-2'>C++</tspan> {'incremental' if is_incremental_chart else 'full'} builds scale better than <tspan class='color-1-of-2'>Rust</tspan>",
-                subtitle=f"tested on Linux. lower is better.",
+                subtitle="tested on Linux. lower is better.",
                 groups=sorted(
                     [
                         BarChartGroup(
                             name=group_name,
                             bars=sorted(
-                                group_bars, key=lambda bar: bar_order.index(bar.name)
+                                group_bars,
+                                key=lambda bar: bar_order.index(bar.name),
                             ),
                         )
                         for group_name, group_bars in group_bars_by_name.items()
@@ -1174,11 +1167,7 @@ class BarChartWriter:
         else:
             classes.append("bar-label-inside-bar")
             if not label_fits_in_bar:
-                if small_label_fits_in_bar:
-                    classes.append("bar-label-small")
-                else:
-                    classes.append("bar-label-very-small")
-
+                classes.append("bar-label-small")
         self.svg.write(
             f"""
                 <rect

@@ -123,7 +123,7 @@ def workspace_to_threecrate(project_dir: pathlib.Path) -> None:
 def workspace_to_fewcrate(
     project_dir: pathlib.Path, libs_to_keep: typing.Tuple[str, ...]
 ) -> None:
-    crate_dirs = sorted(d for d in project_dir.glob("libs/*"))
+    crate_dirs = sorted(iter(project_dir.glob("libs/*")))
     crate_names = [d.name for d in crate_dirs]
 
     def fix_rs(rs: pathlib.Path, current_crate_name: str, crate_reference: str) -> None:
@@ -235,12 +235,12 @@ def cargotest_to_unittest(project_dir: pathlib.Path) -> None:
     test_files = sorted(project_dir.glob("tests/test_*.rs"))
 
     for test_file in test_files:
-        test_file.write_text(test_file.read_text().replace(f"cpp_vs_rust::", "crate::"))
+        test_file.write_text(test_file.read_text().replace("cpp_vs_rust::", "crate::"))
         test_file.rename(project_dir / "src" / test_file.name)
 
-    mod_file = ""
-    for test_file in test_files:
-        mod_file += f"#[cfg(test)]\nmod {test_file.stem};\n"
+    mod_file = "".join(
+        f"#[cfg(test)]\nmod {test_file.stem};\n" for test_file in test_files
+    )
     lib_rs = project_dir / "src" / "lib.rs"
     lib_rs.write_text(lib_rs.read_text() + "\n" + mod_file)
 
